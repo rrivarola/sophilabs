@@ -36,7 +36,7 @@ productRouter.route('/')
 
 productRouter.route('/')
 .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
-    Products.create(req.body)
+    Products.create({"name": req.body.name, "image":"" ,"category": req.body.category, "quantity": req.body.quantity, "price":req.body.price, "user": req.user._id})
         .then((product) => {
             console.log('Product Created ', product);
             res.statusCode = 200;
@@ -46,15 +46,15 @@ productRouter.route('/')
         .catch((err) => next(err));
 })
 
-productRouter.route('/:productId')
-.get((req,res,next) => {
-    Products.findById(req.params.productId)
-    .then((product) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(product);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
+// productRouter.route('/:productId')
+// .get((req,res,next) => {
+//     Products.findById(req.params.productId)
+//     .then((product) => {
+//         res.statusCode = 200;
+//         res.setHeader('Content-Type', 'application/json');
+//         res.json(product);
+//     }, (err) => next(err))
+//     .catch((err) => next(err));
+// })
 
 module.exports = productRouter;
