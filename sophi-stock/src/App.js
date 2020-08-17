@@ -6,6 +6,9 @@ import Home from "./components/HomeComponent";
 
 import Login from "./components/login/LoginComponent";
 import SignUp from "./components/login/SignupComponent";
+import ProductFormComponent from "./components/ProductFormComponent";
+import "react-toastify/dist/ReactToastify.css";
+import {ToastContainer} from 'react-toastify'
 
 function App() {
   const HomePage = () => {
@@ -13,6 +16,7 @@ function App() {
   };
 
   return (
+    
     <Router>
       <div className="App">
         <nav className="navbar navbar-expand-lg navbar-light fixed-top">
@@ -38,12 +42,15 @@ function App() {
         </nav>
 
         <div>
+        <ToastContainer autoClose={3000} hideProgressBar />
           <div>
             <Switch>
               <Route exact path="/" component={Login} />
               <Route path="/sign-in" component={Login} />
               <Route path="/sign-up" component={SignUp} />
               <Route path="/home" component={HomePage} />
+              <Route path="/product" component={ProductFormComponent} />
+              
             </Switch>
           </div>
         </div>

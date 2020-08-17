@@ -2,14 +2,13 @@ import { handleResponse, handleError } from "./ApiUtils";
 import { baseUrl } from "../shared/baseUrl";
 
 export function products() {
-
-  const bearer = 'Bearer ' + localStorage.getItem('token');
+  const bearer = "Bearer " + localStorage.getItem("token");
 
   return fetch(baseUrl + "products", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      'Authorization': bearer
+      Authorization: bearer,
     },
     body: JSON.stringify(),
   })
@@ -31,7 +30,24 @@ export function products() {
       }
     )
     .then((response) => response.json())
-    .catch((error) =>  Promise.reject(error.response || error.message));
+    .catch((error) => Promise.reject(error.response || error.message));
+}
+
+export function addProduct(product) {
+
+  const bearer = "Bearer " + localStorage.getItem("token");
+
+  //let product = {"name": p.name, "image":"" ,"category": p.category, "quantity": p.quantity, "price":p.price}
+  return fetch(baseUrl + "products", {
+    method:"POST", // POST for create, PUT to update when id already exists.
+   headers: {
+      "Content-Type": "application/json",
+      Authorization: bearer,
+    },
+    body: JSON.stringify(product),
+  })
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 export async function Logout() {
