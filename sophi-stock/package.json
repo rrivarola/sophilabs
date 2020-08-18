@@ -15,7 +15,8 @@
     "react-scripts": "3.4.3",
     "react-toastify": "^6.0.8",
     "reactstrap": "5.0.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "font-awesome": "4.7.0"
   },
   "scripts": {
     "start": "react-scripts start",

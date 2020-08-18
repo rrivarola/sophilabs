@@ -1,5 +1,6 @@
 import React from "react";
 import { Table } from "reactstrap";
+import { Button } from "reactstrap";
 
 function Product({ product }) {
   return (
@@ -7,8 +8,19 @@ function Product({ product }) {
       <td>{product.name}</td>
       <td>{product.category}</td>
       <td>{product.quantity}</td>
+      <td>
+        <Button onClick={handleEditClick} variant="primary">
+          <i className="fa fa-pencil fa-fw"></i> 
+        </Button>
+        {""}
+      </td>
     </tr>
   );
+}
+
+function handleEditClick(e) {
+  e.preventDefault();
+  console.log("The link was clicked.");
 }
 
 function ProductList(props) {
@@ -24,6 +36,7 @@ function ProductList(props) {
             <th>Product</th>
             <th>Category</th>
             <th>Quantity</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>{products}</tbody>
