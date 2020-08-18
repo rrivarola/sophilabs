@@ -14,16 +14,16 @@ function Product({ product }) {
 function ProductList(props) {
   let products;
   if (props.products) {
-    products = props.products.map((product) => {
-      return <Product product={product}></Product>;
+    products = props.products.map((product, i) => {
+      return <Product product={product} key={i}></Product>;
     });
     return (
       <Table striped>
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Quantity</th>
           </tr>
         </thead>
         <tbody>{products}</tbody>

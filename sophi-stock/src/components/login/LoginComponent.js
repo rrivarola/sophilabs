@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as userApi from "../../api/UserApi";
 import { useHistory } from "react-router-dom";
 import { baseUrl } from "../../shared/baseUrl";
 
@@ -7,20 +6,11 @@ function Login() {
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState(false);
 
-  const handleSumbit = (event) => {
+  const handleSubmit = (event) => {
     setErrorMsg(false);
     event.preventDefault();
     let email = event.target[0].value;
     let pass = event.target[1].value;
-    // userApi.login({ username: email, password: pass }).then(
-    //     (response) => {
-    //         if (response.ok) {
-    //             history.push("/home");
-    //         } else {
-    //             errorMsg=true;
-    //         }
-    //     }
-    // )
     login({ username: email, password: pass });
   };
 
@@ -66,7 +56,7 @@ function Login() {
   return (
     <div className="auth-wrapper" style={{paddingTop:100}}>
       <div className="auth-inner">
-        <form onSubmit={handleSumbit}>
+        <form onSubmit={handleSubmit}>
           <h3>Sign In</h3>
 
           <div className="form-group">

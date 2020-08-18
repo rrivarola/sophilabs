@@ -32,7 +32,7 @@ class ProductFormComponent extends Component {
     productsApi.addProduct(product).then((response) => {
       //this.setState({ products: productsData });
       this.setState({ redirect: true });
-      toast.success("Course saved.");
+      toast.success("Product added.");
     });
     //this.props.resetFeedbackForm();
   }
@@ -45,10 +45,15 @@ class ProductFormComponent extends Component {
           style={{ paddingTop: 130, background: "#e9ecef" }}
         ></div>
         <div className="col-6 col-md-">
-          <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+          <LocalForm
+            className="form-horizontal"
+            onSubmit={(values) => this.handleSubmit(values)}
+          >
             <Row className="form-group">
-              <Col>
-                <Label htmlFor="rating">Category</Label>
+              <Label className="control-label col-sm-2 text-left" htmlFor="category">
+                Category
+              </Label>
+              <div className="col-sm-5">
                 <Control.select
                   model=".category"
                   id="category"
@@ -60,11 +65,13 @@ class ProductFormComponent extends Component {
                   <option>4</option>
                   <option>5</option>
                 </Control.select>
-              </Col>
+              </div>
             </Row>
             <Row className="form-group">
-              <Col>
-                <Label htmlFor="name">Name</Label>
+              <Label className="control-label col-sm-2 text-left" htmlFor="name">
+                Name
+              </Label>
+              <div className="col-sm-5">
                 <Control.text
                   model=".name"
                   id="name"
@@ -86,11 +93,13 @@ class ProductFormComponent extends Component {
                     maxLength: "Must be 25 characters or less",
                   }}
                 />
-              </Col>
+              </div>
             </Row>
             <Row className="form-group">
-              <Col>
-                <Label htmlFor="Quantity">Quantity</Label>
+              <Label className="control-label col-sm-2 text-left" htmlFor="Quantity">
+                Quantity
+              </Label>
+              <div className="col-sm-5">
                 <Control.text
                   model=".quantity"
                   id="quantity"
@@ -111,14 +120,16 @@ class ProductFormComponent extends Component {
                     required: "Required",
                     minLength: "Must be greater than 2 characters",
                     maxLength: "Must be 15 characters or less",
-                    isNumber: 'Must be a number'
+                    isNumber: "Must be a number",
                   }}
                 />
-              </Col>
+              </div>
             </Row>
             <Row className="form-group">
-              <Col>
-                <Label htmlFor="Price">Price</Label>
+              <Label className="control-label col-sm-2 text-left" htmlFor="Price">
+                Price
+              </Label>
+              <div className="col-sm-5">
                 <Control.text
                   model=".price"
                   id="price"
@@ -126,10 +137,10 @@ class ProductFormComponent extends Component {
                   className="form-control"
                   validators={{
                     required,
-                    isNumber
+                    isNumber,
                   }}
                 />
-                 <Errors
+                <Errors
                   className="text-danger"
                   model=".price"
                   show="touched"
@@ -137,14 +148,22 @@ class ProductFormComponent extends Component {
                     required: "Required",
                     minLength: "Must be greater than 2 characters",
                     maxLength: "Must be 15 characters or less",
-                    isNumber: 'Must be a number'
+                    isNumber: "Must be a number",
                   }}
                 />
-              </Col>
+              </div>
             </Row>
-            <Button type="submit" className="bg-primary">
-              Add product
-            </Button>
+
+            <Row className="form-group">
+            <Label className="control-label col-sm-2 text-left" htmlFor="Price">
+                
+              </Label>
+            <div className="col-sm-9">
+              <Button type="submit" className="bg-primary">
+                Add product
+              </Button>
+            </div>
+            </Row>
           </LocalForm>
         </div>
       </>
