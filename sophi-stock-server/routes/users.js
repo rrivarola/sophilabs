@@ -5,6 +5,7 @@ var authenticate = require("../authenticate");
 const bodyParser = require("body-parser");
 var User = require("../models/user");
 var passport = require("passport");
+const cors = require("./cors");
 
 router.use(bodyParser.json());
 
@@ -13,7 +14,7 @@ router.get("/", authenticate.verifyUser, (req, res, next) => {
     .then(
       (users) => {
         res.statusCode = 200;
-        res.header('Access-Control-Allow-Origin', '*');
+        res.header("Access-Control-Allow-Origin", "*");
         res.setHeader("Content-Type", "application/json");
         res.json(users);
       },
@@ -24,7 +25,7 @@ router.get("/", authenticate.verifyUser, (req, res, next) => {
 
 router.post("/signup", (req, res, next) => {
   User.register(
-    new User({ username: req.body.username }),
+    new User({ username: req.body.username, firstname: req.body.firstname, lastname: req.body.lastname }),
     req.body.password,
     (err, user) => {
       if (err) {
@@ -52,17 +53,23 @@ router.post("/signup", (req, res, next) => {
   );
 });
 
-router.post("/login", passport.authenticate("local"), (req, res) => {
-  var token = authenticate.getToken({ _id: req.user._id });
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.header('Access-Control-Allow-Origin', '*');
-  res.json({
-    success: true,
-    token: token,
-    status: "You are successfully logged in!",
-  });
-});
+router.post(
+  "/login",
+  cors.corsWithOptions,
+  passport.authenticate("local"),
+  (req, res) => {
+    var token = authenticate.getToken({ _id: req.user._id });
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    res.json({
+      success: true,
+      token: token,
+      status: "You are successfully logged in!",
+    });
+  }
+);
 
 router.get("/logout", (req, res) => {
   if (req.session) {
