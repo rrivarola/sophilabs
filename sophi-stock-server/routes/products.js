@@ -45,6 +45,17 @@ productRouter.route('/')
         }, (err) => next(err))
         .catch((err) => next(err));
 })
+.put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+    Products.findByIdAndUpdate(req.params.Id, {
+        $set: req.body
+    }, { new: true })
+        .then((dish) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(dish);
+        }, (err) => next(err))
+        .catch((err) => next(err));
+})
 
 // productRouter.route('/:productId')
 // .get((req,res,next) => {
