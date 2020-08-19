@@ -6,9 +6,9 @@ import Home from "./components/HomeComponent";
 
 import Login from "./components/login/LoginComponent";
 import SignUp from "./components/login/SignupComponent";
-import ProductFormComponent from "./components/ProductFormComponent";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer} from 'react-toastify'
+import AddProductPageComponent from "./components/AddProductPageComponent";
 
 function App() {
   const HomePage = () => {
@@ -49,7 +49,7 @@ function App() {
               <Route path="/sign-in" component={Login} />
               <Route path="/sign-up" component={SignUp} />
               <Route path="/home" component={HomePage} />
-              <Route path="/product" component={ProductFormComponent} />
+              <Route path="/product" component={AddProductPageComponent} />
               
             </Switch>
           </div>

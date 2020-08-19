@@ -33,13 +33,13 @@ export function products() {
     .catch((error) => Promise.reject(error.response || error.message));
 }
 
-export function addProduct(product) {
+export function saveProduct(product) {
 
   const bearer = "Bearer " + localStorage.getItem("token");
 
   //let product = {"name": p.name, "image":"" ,"category": p.category, "quantity": p.quantity, "price":p.price}
   return fetch(baseUrl + "products", {
-    method:"POST", // POST for create, PUT to update when id already exists.
+    method:product._id ? "PUT":"POST", // POST for create, PUT to update when id already exists.
    headers: {
       "Content-Type": "application/json",
       Authorization: bearer,

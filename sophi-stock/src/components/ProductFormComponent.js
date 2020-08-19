@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Control, LocalForm, Errors } from "react-redux-form";
-import { Button, Label, Col, Row } from "reactstrap";
-import * as productsApi from "../api/ProductsApi";
-import { toast } from "react-toastify";
-import { Redirect } from "react-router-dom";
+import { Button, Label, Row } from "reactstrap";
+import PropTypes from "prop-types";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -16,64 +14,86 @@ class ProductFormComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirect: false,
+      editionMode:props.EditionMode,
+      product: null,
+      category: "",
+      price: 0,
+      quantity: 0,
+      _id: "",
+      name: "",
     };
+    this.changeQuantity = this.changeQuantity.bind(this);
+    this.changePrice = this.changePrice.bind(this);
+    this.changeCategory = this.changeCategory.bind(this);
+    this.changeName = this.changeName.bind(this);
   }
 
-  handleSubmit(values) {
-    //console.log("Current State is: " + JSON.stringify(values));
-    let product = {
-      name: values.name,
-      image: "",
-      category: values.category,
-      quantity: values.quantity,
-      price: values.price,
-    };
-    productsApi.addProduct(product).then((response) => {
-      //this.setState({ products: productsData });
-      this.setState({ redirect: true });
-      toast.success("Product added.");
-    });
-    //this.props.resetFeedbackForm();
-  }
+  changeName = (event) => {
+    this.setState({ name: event.target.value });
+  };
+
+  changeQuantity = (event) => {
+    this.setState({ quantity: event.target.value });
+  };
+  changePrice = (event) => {
+    this.setState({ price: event.target.value });
+  };
+  changeCategory = (event) => {
+    this.setState({ category: event.target.value });
+  };
+
+  cancelAction = (values) => {
+    if (this.props.editionMode) this.props.handleCancelEditProduct();
+    else this.props.handleCancelAddProduct();
+  };
+
+  handleSubmit = (values) => {
+    // event.preventDefault();
+    let product;
+    if (this.props.editionMode) {
+      product = this.state.product;
+      product.category = this.state.category;
+      product.quantity = this.state.quantity;
+      product.price = this.state.price;
+    } else {
+      product = {
+        name: values.name,
+        category: this.state.category,
+        quantity: this.state.quantity,
+        price: this.state.price,
+      };
+    }
+
+    if (this.props.editionMode) this.props.onConfirmUpdateProduct(product);
+    else this.props.onConfirmAddProduct(product);
+    //this.setState({product:null})
+  };
   render() {
     return (
       <>
-        {this.state.redirect && <Redirect to="/home" />}
-        <div
-          className="col-6"
-          style={{ paddingTop: 130, background: "#e9ecef" }}
-        ></div>
+        {this.state.product != null && (
+          <div
+            className="col-6"
+            style={{ paddingTop: 130, background: "#e9ecef" }}
+          ></div>
+        )}
         <div className="col-6 col-md-">
           <LocalForm
             className="form-horizontal"
             onSubmit={(values) => this.handleSubmit(values)}
           >
             <Row className="form-group">
-              <Label className="control-label col-sm-2 text-left" htmlFor="category">
-                Category
-              </Label>
-              <div className="col-sm-5">
-                <Control.select
-                  model=".category"
-                  id="category"
-                  className="form-control"
-                >
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </Control.select>
-              </div>
-            </Row>
-            <Row className="form-group">
-              <Label className="control-label col-sm-2 text-left" htmlFor="name">
+              <Label
+                className="control-label col-sm-3 text-left"
+                htmlFor="name"
+              >
                 Name
               </Label>
               <div className="col-sm-5">
                 <Control.text
                   model=".name"
+                  value={this.state.name}
+                  onChange={this.changeName}
                   id="name"
                   rows="1"
                   className="form-control"
@@ -96,7 +116,34 @@ class ProductFormComponent extends Component {
               </div>
             </Row>
             <Row className="form-group">
-              <Label className="control-label col-sm-2 text-left" htmlFor="Quantity">
+              <Label
+                className="control-label col-sm-3 text-left"
+                htmlFor="category"
+              >
+                Category
+              </Label>
+              <div className="col-sm-5">
+                <Control.select
+                  model=".category"
+                  id="category"
+                  className="form-control"
+                  onChange={this.changeCategory}
+                  value={this.state.category}
+                >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </Control.select>
+              </div>
+            </Row>
+
+            <Row className="form-group">
+              <Label
+                className="control-label col-sm-3 text-left"
+                htmlFor="Quantity"
+              >
                 Quantity
               </Label>
               <div className="col-sm-5">
@@ -105,6 +152,8 @@ class ProductFormComponent extends Component {
                   id="quantity"
                   rows="1"
                   className="form-control"
+                  value={this.state.quantity}
+                  onChange={this.changeQuantity}
                   validators={{
                     required,
                     isNumber,
@@ -126,7 +175,10 @@ class ProductFormComponent extends Component {
               </div>
             </Row>
             <Row className="form-group">
-              <Label className="control-label col-sm-2 text-left" htmlFor="Price">
+              <Label
+                className="control-label col-sm-3 text-left"
+                htmlFor="Price"
+              >
                 Price
               </Label>
               <div className="col-sm-5">
@@ -135,6 +187,8 @@ class ProductFormComponent extends Component {
                   id="price"
                   rows="1"
                   className="form-control"
+                  value={this.state.price}
+                  onChange={this.changePrice}
                   validators={{
                     required,
                     isNumber,
@@ -153,16 +207,21 @@ class ProductFormComponent extends Component {
                 />
               </div>
             </Row>
-
             <Row className="form-group">
-            <Label className="control-label col-sm-2 text-left" htmlFor="Price">
-                
-              </Label>
-            <div className="col-sm-9">
-              <Button type="submit" className="bg-primary">
-                Add product
-              </Button>
-            </div>
+              <div className="col-sm-7 ">
+                <Button
+                  type="button"
+                  className="bg-primary float-right"
+                  onClick={this.cancelAction}
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div className="col-sm-3">
+                <Button type="submit" className="bg-primary float-left">
+                  {this.props.editionMode? "Edit" : "Confirm"}
+                </Button>
+              </div>
             </Row>
           </LocalForm>
         </div>
