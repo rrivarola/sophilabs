@@ -84,12 +84,7 @@ class ProductFormComponent extends Component {
   render() {
     return (
       <>
-        {this.state.product != null && (
-          <div
-            className="col-6"
-            style={{ paddingTop: 130, background: "#e9ecef" }}
-          ></div>
-        )}
+        
         <div className="col-6 col-md-">
           <LocalForm
             className="form-horizontal"

@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { baseUrl } from "../../shared/baseUrl";
 
-function Login() {
+function Login(props) {
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState(false);
+  
+
+  const handleAuthentication = (userName) => {
+    props.handleAuthenticationInfo(userName);
+  }
 
   const handleSubmit = (event) => {
     setErrorMsg(false);
@@ -41,9 +46,11 @@ function Login() {
       .then((response) => {
         if (response.success) {
           // If login was successful, set the token in local storage
+         
           localStorage.setItem("token", response.token);
           localStorage.setItem("creds", JSON.stringify(creds));
           history.push("/home");
+          handleAuthentication(response.user[0].firstname)
         } else {
           var error = new Error("Error " + response.status);
           error.response = response;
@@ -54,7 +61,7 @@ function Login() {
   }
 
   return (
-    <div className="auth-wrapper" style={{paddingTop:100}}>
+    <div className="auth-wrapper" style={{ paddingTop: 100 }}>
       <div className="auth-inner">
         <form onSubmit={handleSubmit}>
           <h3>Sign In</h3>
