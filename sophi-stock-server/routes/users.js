@@ -58,28 +58,45 @@ router.post(
   cors.corsWithOptions,
   passport.authenticate("local"),
   (req, res) => {
-    var token = authenticate.getToken({ _id: req.user._id });
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.header("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    res.json({
-      success: true,
-      token: token,
-      status: "You are successfully logged in!",
-    });
+    let dataUser;
+    console.log(req.user._id);
+    
+    User.find({ '_id': req.user._id }).then((user)=> {
+     //User.fin(req.user._id).then((user)=> user.toJSON() );
+     var token = authenticate.getToken({ _id: req.user._id });
+     console.log(dataUser);
+     res.statusCode = 200;
+     res.setHeader("Content-Type", "application/json");
+     res.header("Access-Control-Allow-Origin", "*");
+     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+     res.json({
+       success: true,
+       token: token,
+       status: "You are successfully logged in!",
+       user:user
+     });
+    }
+    )
   }
 );
 
 router.get("/logout", (req, res) => {
-  if (req.session) {
-    req.session.destroy();
-    res.clearCookie("session-id");
-    res.redirect("/");
-  } else {
-    var err = new Error("You are not logged in!");
-    err.status = 403;
-    next(err);
-  }
+  console.log(req.session);
+  // if (req.session) {
+  //  // req.session.destroy();
+  //  //req.logOut();
+  //  
+  // } else {
+  //   var err = new Error("You are not logged in!");
+  //   err.status = 403;
+  //   next(err);
+  // }
+ res.clearCookie("session-id");
+  //   res.redirect("/");
+  req.logOut();
+  req.session = null;
+  res.clearCookie("session-id");
+
+  res.redirect("/");
 });
 module.exports = router;
