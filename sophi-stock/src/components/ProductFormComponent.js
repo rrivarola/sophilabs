@@ -13,15 +13,28 @@ const validEmail = (val) =>
 class ProductFormComponent extends Component {
   constructor(props) {
     super(props);
+    if(props.editionMode){
+      this.state = {
+        editionMode:props.editionMode,
+        product: props.product,
+        category: props.product.category,
+        price: props.product.price,
+        quantity: props.product.quantity,
+        _id: props.product._id,
+        name: props.product.name,
+      };
+    }
+    else{
     this.state = {
-      editionMode:props.EditionMode,
-      product: null,
+      editionMode:props.editionMode,
+      product: props.editionMode? props.product:null,
       category: "",
       price: 0,
       quantity: 0,
       _id: "",
       name: "",
     };
+  }
     this.changeQuantity = this.changeQuantity.bind(this);
     this.changePrice = this.changePrice.bind(this);
     this.changeCategory = this.changeCategory.bind(this);
@@ -219,7 +232,7 @@ class ProductFormComponent extends Component {
               </div>
               <div className="col-sm-3">
                 <Button type="submit" className="bg-primary float-left">
-                  {this.props.editionMode? "Edit" : "Confirm"}
+                  Save
                 </Button>
               </div>
             </Row>

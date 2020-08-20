@@ -34,13 +34,12 @@ export function products() {
 }
 
 export function saveProduct(product) {
-
   const bearer = "Bearer " + localStorage.getItem("token");
-
+  const urldata = product._id ? "products/" + product._id : "products";
   //let product = {"name": p.name, "image":"" ,"category": p.category, "quantity": p.quantity, "price":p.price}
-  return fetch(baseUrl + "products", {
-    method:product._id ? "PUT":"POST", // POST for create, PUT to update when id already exists.
-   headers: {
+  return fetch(baseUrl + urldata, {
+    method: product._id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
+    headers: {
       "Content-Type": "application/json",
       Authorization: bearer,
     },
