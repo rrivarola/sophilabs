@@ -45,15 +45,25 @@ productRouter.route('/')
         }, (err) => next(err))
         .catch((err) => next(err));
 })
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    res.statusCode = 403;
+    res.end('PUT operation not supported on /dishes/'
+        + req.params.dishId + '/comments');
+})
+
+productRouter.route('/:id')
 .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
-    Products.findByIdAndUpdate(req.params.Id, {
+    console.log(JSON.stringify(req.params.id));
+    Products.findByIdAndUpdate(req.params.id, {
         $set: req.body
     }, { new: true })
-        .then((dish) => {
+        .then((product) => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(dish);
-        }, (err) => next(err))
+            res.json(product);
+        }, (err) => next(
+            console.log("error"),
+            err))
         .catch((err) => next(err));
 })
 
